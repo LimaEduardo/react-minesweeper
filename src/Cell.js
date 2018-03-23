@@ -32,8 +32,8 @@ export class Cell extends Component {
     super(props)
 
     this.state = {
-      reveled: true,
-      display: this.props.value
+      reveled: false,
+      display: null
     }
 
     this.revealCell = this.revealCell.bind(this)
