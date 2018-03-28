@@ -17,8 +17,11 @@ export class GameBoard extends Component {
 
     this.state = {
       board: undefined,
-      ready: false
+      ready: false,
+      gameOver: false
     }
+
+    this.itsABomb = this.itsABomb.bind(this)
     
   }
 
@@ -78,9 +81,13 @@ export class GameBoard extends Component {
     })
   }
 
+  itsABomb(){
+    this.setState({gameOver: true})
+  }
+
 
   render() {
-    const {board, ready} = this.state
+    const {board, ready, gameOver} = this.state
 
     if(ready){
       styles.cell = {
@@ -94,11 +101,13 @@ export class GameBoard extends Component {
       <div style={styles.root}>
         {ready && board ? (board.map((lines, indexLine) => (
           lines.map((column, indexColumn) => (
-              <div style={styles.cell} >
-                <Cell value={column} />
+              <div key={""+indexLine+indexColumn} style={styles.cell} >
+                <Cell value={column} itsABomb={this.itsABomb} disabled={gameOver} />
               </div>
           ))
         ))) : null}
+
+        {gameOver ? "Game is over" : null}
       </div>
     )
   }

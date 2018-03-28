@@ -22,7 +22,14 @@ export class GameConfig extends Component {
   handleSubmit(event){
     event.preventDefault();
     const {config} = this.props
-    config(this.state)
+    const {lines, columns, mines} = this.state
+    
+    const boardConfig = {
+      lines: Number(lines),
+      columns: Number(columns),
+      mines: Number(mines)
+    }
+    config(boardConfig)
   }
 
   render() {

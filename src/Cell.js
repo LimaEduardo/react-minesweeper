@@ -14,9 +14,7 @@ const styles = {
     height: 12,
   },
   buttonPressed: {
-    width: 25 ,
-    height: 25,
-    backgroundColor: 'white'
+    
   },
   buttonPressedWithBomb: {
     width: 25 ,
@@ -38,16 +36,65 @@ export class Cell extends Component {
 
     this.revealCell = this.revealCell.bind(this)
     this.renderButton = this.renderButton.bind(this)
+    this.BOMB = this.BOMB.bind(this)
 
   }
 
-  revealCell(){
+  revealCell(event){
+    event.preventDefault()
+    console.log(event);
     const {value} = this.props
-    this.setState({ display: value})
+    if(event.nativeEvent.which === 1){
+      console.log("clicky clicky")
+      if (value === -1){
+        this.BOMB();
+      }
+      this.setState({ display: value})
+    } else if (event.nativeEvent.which === 3) {
+      console.log('Right click');
+    } else {
+      console.log('que')
+    }
+  }
+
+  BOMB(){
+    this.props.itsABomb();
+  }
+
+  defineColor(display){
+    let color
+    switch(display){
+      case 1: {
+        color = '#6323F3'
+        break;
+      }
+      case 2: {
+        color = '#2C9A2C'
+        break;
+      }
+      case 3: {
+        color = '#FF0000'
+        break;
+      }
+      case 4: {
+        color = '#472990'
+        break;
+      }
+      case 5: {
+        color = '#A65F5F'
+        break;
+      }
+      default: {
+        color = 'white'
+        break;
+      }
+    }
+    return color
   }
 
   renderButton(){
     const {display} = this.state
+    const {disabled} = this.props
     if (display === -1) {
       return (
         <button style={styles.buttonPressedWithBomb} onClick={this.revealCell} >
@@ -55,14 +102,21 @@ export class Cell extends Component {
         </button>
       )
     } else if (display !== null && display !== -1) {
+      let color = this.defineColor(display)
+      let buttonStyle = {
+        width: 25 ,
+        height: 25,
+        backgroundColor: 'white',
+        color
+      }
       return (
-        <button style={styles.buttonPressed} onClick={this.revealCell} >
-          {display === 0 ? "" : display}
+        <button style={buttonStyle} onClick={this.revealCell}>
+          {display === 0 ? " " : display}
         </button>
-      )
+      )      
     } else {
       return (
-        <button style={styles.button} onClick={this.revealCell} >
+        <button disabled={disabled} style={styles.button} onClick={this.revealCell} >
           {" "}
         </button>
       )
